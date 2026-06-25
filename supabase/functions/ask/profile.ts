@@ -1,0 +1,77 @@
+// ============================================================
+// CONTEXTE PROFIL — la SEULE source de vérité du chatbot.
+// L'assistant ne répond QU'À PARTIR de ce texte. Modifie-le librement.
+// (Bloc 1 : CV. Bloc 2 : tes instructions / ta personnalité à compléter.)
+// ============================================================
+
+export const PROFILE = `
+# CV — ROMAIN AUBERT
+Ingénieur Centrale Lille — Conseil, Data & conception d'outils IA sur-mesure.
+Basé à Paris, mobilité ouverte. Contact : romain.aubert@icloud.com.
+LinkedIn : linkedin.com/in/romain-aubert-07-10-2001
+
+## Profil
+Consultant ingénieur curieux. Ne se cantonne pas aux analyses et aux slides : va jusqu'à
+l'outil qui résout vraiment le problème. Moteur : servir ses clients avec impact, apprendre
+en continu, rester à jour sur les dernières technologies (IA en tête). Sportif d'endurance,
+d'où rigueur et persévérance dans sa façon de travailler.
+
+## Compétences techniques
+- Dev & IA : Python (IA en production), SQL, VBA, C/C++, Java ; pipelines multi-LLM (APIs),
+  clustering sémantique, analyse statistique ; développement assisté par IA (Claude, Codex).
+- Data : Excel avancé, Power Query, Power BI, Dataiku ; segmentation, machine learning
+  appliqué, dashboards automatisés.
+- Conception & archi : cartographie de process, cahier des charges, modélisation métier /
+  fonctionnelle / applicative / techno ; UML, BPMN, TOGAF 9 (certifié).
+
+## Expériences
+- Sia Partners — Consultant Data & IA (nov. 2025 → présent).
+  Lauréat d'un concours data interne : outil Python prenant un fichier Excel de prompts,
+  lançant des requêtes massives multi-LLM via API, puis analysant les réponses (clustering
+  sémantique, statistiques d'occurrence) pour positionner le cabinet face à ses concurrents.
+  Outil au cœur de l'offre GEO. — Cadrage et refonte du système de matching profils/séjours
+  d'un leader hôtelier mondial (202 M de séjours) : modélisation, rapprochement des profils
+  selon le parcours CRM, pilotage (PMO) de la refonte.
+- Groupe La Poste — Analyste, Direction Stratégique (mars–nov. 2025).
+  Benchmark concurrentiel (financier, stratégique, RSE) de 9 opérateurs logistiques, livrables
+  COMEX ; due diligence opérationnelle et financière pour une commission d'investissement.
+  Études prospectives marché colis & transports (scénarios moyen terme, signaux faibles).
+- SUEZ — Architecte d'entreprise, mémoire Centrale (sept. 2024–mars 2025).
+  Référentiel d'architecture d'entreprise (TOGAF), cartographie/optimisation des flux
+  inter-applicatifs ; modélisation des couches métier, fonctionnelle, applicative, technologique.
+- IAC Partners — Consultant stratégie, growth & product (sept. 2023–fév. 2024).
+  Outils de calcul automatisés (VBA/Excel) pour une restructuration des achats d'un leader de
+  la sécurité incendie : 200 k€ d'économies récurrentes sur 40 M€ d'achats. Étude stratégique
+  d'un composant moteur critique (aéro/défense), analyse de fiabilité sur 10 ans (bases
+  EASA/FAA). Optimisation des coûts de production (−15 %) en dermo-cosmétique ; formations
+  Design-to-Cost / Design-to-Green (IAC Academy).
+- Excilience — Consultant change & performance (fév.–août 2023).
+  Étude de performance de 1 500 commerciaux (Solvay) : 30 indicateurs créés et analysés ;
+  nouveau modèle opérationnel et 2 séminaires d'optimisation inter-BU pour la DSI (SUEZ).
+  Automatisation de dashboards Power BI/Excel accélérant 25+ reportings ad-hoc.
+
+## Formation
+- Centrale Lille — ingénieur généraliste, majeure data science, SI & stratégie (2021–2025).
+- Polytechnique Wrocław — échange M1, data science, IA & génie mécanique (2024).
+- CPGE PCSI / PSI, Lycée du Parc, Lyon (2019–2021).
+
+## Langues & certifications
+Anglais bilingue (TOEIC 960/990). Allemand intermédiaire. TOGAF 9. MOOC INRS. Gestion de projet.
+
+## Sports & vie extra-pro
+- Ultra-trail & skyrun : Restonica Ultra 100k, Beskidy 50k, Maratour en Chartreuse, arêtes du
+  Domenon, traversée des Bauges, Pointe Percée.
+- Alpinisme & ski de randonnée : traversée du Pelvoux, traversée des Tatras.
+- Cyclisme route & VTT : L'Étape du Tour 2025, Oneshot des Vosges, Oneshot tour du Jura, bikepacking.
+
+## Autres projets
+- Orb'servator — finaliste vol zéro-g (CNRS/CNES/MBDA) : cahier des charges et calibration du
+  produit cible, du besoin scientifique aux spécifications techniques. Drone à propulsion
+  pneumatique, servocommandes 6 axes / 18 propulseurs, modélisation MATLAB, CAO, impression 3D.
+- Centraltitude — Président : board de 11, ski-week de 400 étudiants sur 3 écoles, budget 200 k€.
+
+# INSTRUCTIONS & PERSONNALITÉ (à compléter par Romain)
+# Colle ici le contenu de ton fichier bloc-notes : ton style, tes motivations,
+# ce que tu veux mettre en avant, ce que l'assistant doit éviter de dire, etc.
+[...]
+`;

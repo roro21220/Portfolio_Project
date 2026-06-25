@@ -310,6 +310,73 @@ function Footer() {
   )
 }
 
+const ASK_SUGGESTIONS = [
+  'Quelles sont ses expériences en IA ?',
+  'Quels outils a-t-il construits ?',
+  'Quel est son parcours ?',
+  'Pourquoi le conseil en IA ?',
+]
+
+function Ask() {
+  const [q, setQ] = useState('')
+  const [answer, setAnswer] = useState('')
+  const [status, setStatus] = useState(null) // null | 'loading' | 'done' | 'err'
+  const [error, setError] = useState('')
+
+  const FN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ask`
+  const ANON = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
+
+  const ask = async (question) => {
+    const text = (question ?? q).trim()
+    if (!text) return
+    setQ(text); setStatus('loading'); setError(''); setAnswer('')
+    try {
+      const res = await fetch(FN_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ANON}`, apikey: ANON },
+        body: JSON.stringify({ question: text }),
+      })
+      const data = await res.json()
+      if (!res.ok) { setStatus('err'); setError(data.error || 'Erreur.') }
+      else { setStatus('done'); setAnswer(data.answer || '') }
+    } catch (e) { setStatus('err'); setError(String(e)) }
+  }
+
+  const onSubmit = (e) => { e.preventDefault(); ask() }
+
+  return (
+    <section id="ask">
+      <div className="ask-grid">
+        <div className="fade-up">
+          <div className="section-label">Assistant IA</div>
+          <h2>Que voulez-vous<br />savoir sur moi ?</h2>
+          <p>Posez votre question. Un assistant y répond à partir de mon CV et de mon profil :
+             expériences, compétences, projets, parcours.</p>
+          <form onSubmit={onSubmit} className="ask-form">
+            <input value={q} onChange={(e) => setQ(e.target.value)}
+                   placeholder="Ex : Quels outils IA a-t-il construits ?" maxLength={1000} />
+            <button type="submit" className="btn-solid" disabled={status === 'loading'}>
+              {status === 'loading' ? '…' : 'Demander'}
+            </button>
+          </form>
+          <div className="ask-chips">
+            {ASK_SUGGESTIONS.map((s) => (
+              <button key={s} className="ask-chip" onClick={() => ask(s)} disabled={status === 'loading'}>{s}</button>
+            ))}
+          </div>
+        </div>
+        <div className="ask-answer fade-up">
+          <div className="ask-answer-label">Réponse</div>
+          {status === null && <p className="ask-placeholder">La réponse s'affichera ici.</p>}
+          {status === 'loading' && <p className="ask-placeholder">Réflexion en cours…</p>}
+          {status === 'done' && <p className="ask-text">{answer}</p>}
+          {status === 'err' && <p className="ask-err">{error}</p>}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export default function App() {
   useReveal()
   return (
@@ -317,6 +384,7 @@ export default function App() {
       <Nav />
       <Hero />
       <About />
+      <Ask />
       <Build />
       <Projects />
       <Mountain />

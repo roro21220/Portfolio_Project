@@ -1,0 +1,156 @@
+// ============================================================
+// FONCTION 'ask' — VERSION AUTONOME (un seul fichier)
+// À COLLER dans Supabase Dashboard > Edge Functions > Create function.
+// Contient le contexte profil + la logique. Édite le bloc PROFILE pour
+// mettre à jour les réponses du bot.
+// ============================================================
+
+// ============================================================
+// CONTEXTE PROFIL — la SEULE source de vérité du chatbot.
+// L'assistant ne répond QU'À PARTIR de ce texte. Modifie-le librement.
+// (Bloc 1 : CV. Bloc 2 : tes instructions / ta personnalité à compléter.)
+// ============================================================
+
+const PROFILE = `
+# CV — ROMAIN AUBERT
+Ingénieur Centrale Lille — Conseil, Data & conception d'outils IA sur-mesure.
+Basé à Paris, mobilité ouverte. Contact : romain.aubert@icloud.com.
+LinkedIn : linkedin.com/in/romain-aubert-07-10-2001
+
+## Profil
+Consultant ingénieur curieux. Ne se cantonne pas aux analyses et aux slides : va jusqu'à
+l'outil qui résout vraiment le problème. Moteur : servir ses clients avec impact, apprendre
+en continu, rester à jour sur les dernières technologies (IA en tête). Sportif d'endurance,
+d'où rigueur et persévérance dans sa façon de travailler.
+
+## Compétences techniques
+- Dev & IA : Python (IA en production), SQL, VBA, C/C++, Java ; pipelines multi-LLM (APIs),
+  clustering sémantique, analyse statistique ; développement assisté par IA (Claude, Codex).
+- Data : Excel avancé, Power Query, Power BI, Dataiku ; segmentation, machine learning
+  appliqué, dashboards automatisés.
+- Conception & archi : cartographie de process, cahier des charges, modélisation métier /
+  fonctionnelle / applicative / techno ; UML, BPMN, TOGAF 9 (certifié).
+
+## Expériences
+- Sia Partners — Consultant Data & IA (nov. 2025 → présent).
+  Lauréat d'un concours data interne : outil Python prenant un fichier Excel de prompts,
+  lançant des requêtes massives multi-LLM via API, puis analysant les réponses (clustering
+  sémantique, statistiques d'occurrence) pour positionner le cabinet face à ses concurrents.
+  Outil au cœur de l'offre GEO. — Cadrage et refonte du système de matching profils/séjours
+  d'un leader hôtelier mondial (202 M de séjours) : modélisation, rapprochement des profils
+  selon le parcours CRM, pilotage (PMO) de la refonte.
+- Groupe La Poste — Analyste, Direction Stratégique (mars–nov. 2025).
+  Benchmark concurrentiel (financier, stratégique, RSE) de 9 opérateurs logistiques, livrables
+  COMEX ; due diligence opérationnelle et financière pour une commission d'investissement.
+  Études prospectives marché colis & transports (scénarios moyen terme, signaux faibles).
+- SUEZ — Architecte d'entreprise, mémoire Centrale (sept. 2024–mars 2025).
+  Référentiel d'architecture d'entreprise (TOGAF), cartographie/optimisation des flux
+  inter-applicatifs ; modélisation des couches métier, fonctionnelle, applicative, technologique.
+- IAC Partners — Consultant stratégie, growth & product (sept. 2023–fév. 2024).
+  Outils de calcul automatisés (VBA/Excel) pour une restructuration des achats d'un leader de
+  la sécurité incendie : 200 k€ d'économies récurrentes sur 40 M€ d'achats. Étude stratégique
+  d'un composant moteur critique (aéro/défense), analyse de fiabilité sur 10 ans (bases
+  EASA/FAA). Optimisation des coûts de production (−15 %) en dermo-cosmétique ; formations
+  Design-to-Cost / Design-to-Green (IAC Academy).
+- Excilience — Consultant change & performance (fév.–août 2023).
+  Étude de performance de 1 500 commerciaux (Solvay) : 30 indicateurs créés et analysés ;
+  nouveau modèle opérationnel et 2 séminaires d'optimisation inter-BU pour la DSI (SUEZ).
+  Automatisation de dashboards Power BI/Excel accélérant 25+ reportings ad-hoc.
+
+## Formation
+- Centrale Lille — ingénieur généraliste, majeure data science, SI & stratégie (2021–2025).
+- Polytechnique Wrocław — échange M1, data science, IA & génie mécanique (2024).
+- CPGE PCSI / PSI, Lycée du Parc, Lyon (2019–2021).
+
+## Langues & certifications
+Anglais bilingue (TOEIC 960/990). Allemand intermédiaire. TOGAF 9. MOOC INRS. Gestion de projet.
+
+## Sports & vie extra-pro
+- Ultra-trail & skyrun : Restonica Ultra 100k, Beskidy 50k, Maratour en Chartreuse, arêtes du
+  Domenon, traversée des Bauges, Pointe Percée.
+- Alpinisme & ski de randonnée : traversée du Pelvoux, traversée des Tatras.
+- Cyclisme route & VTT : L'Étape du Tour 2025, Oneshot des Vosges, Oneshot tour du Jura, bikepacking.
+
+## Autres projets
+- Orb'servator — finaliste vol zéro-g (CNRS/CNES/MBDA) : cahier des charges et calibration du
+  produit cible, du besoin scientifique aux spécifications techniques. Drone à propulsion
+  pneumatique, servocommandes 6 axes / 18 propulseurs, modélisation MATLAB, CAO, impression 3D.
+- Centraltitude — Président : board de 11, ski-week de 400 étudiants sur 3 écoles, budget 200 k€.
+
+# INSTRUCTIONS & PERSONNALITÉ (à compléter par Romain)
+# Colle ici le contenu de ton fichier bloc-notes : ton style, tes motivations,
+# ce que tu veux mettre en avant, ce que l'assistant doit éviter de dire, etc.
+[...]
+`;
+
+// Supabase Edge Function "ask" — assistant IA sur le profil de Romain.
+// La clé Gemini reste cote serveur (secret Supabase GEMINI_API_KEY).
+// Le modele ne repond QU'A PARTIR du contexte PROFILE (CV + instructions).
+
+const MODEL = "gemini-2.0-flash"; // rapide + free tier ; changeable
+const cors = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+
+const SYSTEM = `Tu es l'assistant du portfolio de Romain Aubert. Tu reponds aux visiteurs
+(recruteurs, clients) a la troisieme personne ("Romain a...", "Il a...").
+
+REGLES STRICTES :
+- Reponds UNIQUEMENT a partir du CONTEXTE ci-dessous. N'invente jamais de fait, de date,
+  de chiffre, d'entreprise ou de competence absente du contexte.
+- Si l'information n'est pas dans le contexte, dis-le honnetement, par ex. :
+  "Ce n'est pas precise dans le profil de Romain, mais vous pouvez le contacter directement."
+- Reponds en francais (ou dans la langue de la question), de maniere concise, claire et
+  professionnelle. 1 a 4 phrases en general.
+- Reste factuel et bienveillant. Ne donne pas d'avis politique, ni d'information personnelle
+  sensible non presente dans le contexte.
+
+CONTEXTE :
+${PROFILE}`;
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
+  try {
+    const apiKey = Deno.env.get("GEMINI_API_KEY");
+    if (!apiKey) {
+      return json({ error: "GEMINI_API_KEY non configuree (supabase secrets set)." }, 500);
+    }
+    const { question } = await req.json();
+    if (!question || typeof question !== "string" || question.length > 1000) {
+      return json({ error: "Question invalide." }, 400);
+    }
+
+    const url =
+      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`;
+    const body = {
+      systemInstruction: { parts: [{ text: SYSTEM }] },
+      contents: [{ role: "user", parts: [{ text: question }] }],
+      generationConfig: { temperature: 0.3, maxOutputTokens: 400 },
+    };
+
+    const r = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const data = await r.json();
+    if (!r.ok) {
+      return json({ error: data?.error?.message || "Erreur Gemini." }, 502);
+    }
+    const answer =
+      data?.candidates?.[0]?.content?.parts?.map((p: any) => p.text).join("") ??
+      "Pas de reponse.";
+    return json({ answer });
+  } catch (e) {
+    return json({ error: String(e) }, 500);
+  }
+});
+
+function json(obj: unknown, status = 200) {
+  return new Response(JSON.stringify(obj), {
+    status,
+    headers: { ...cors, "Content-Type": "application/json" },
+  });
+}
