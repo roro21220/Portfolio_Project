@@ -277,3 +277,18 @@ footer a:hover { color: var(--text); }
   .ask-grid { grid-template-columns: 1fr; }
   .ask-photo { min-height: 260px; order: -1; }
 }
+
+/* Markdown rendering in the chat answer */
+.ask-text { white-space: normal; color: var(--text); font-size: 16px; line-height: 1.75; }
+.ask-text > *:first-child { margin-top: 0; }
+.ask-text > *:last-child { margin-bottom: 0; }
+.ask-text p { margin: 0 0 12px; }
+.ask-text strong { color: #fff; font-weight: 600; }
+.ask-text em { color: var(--text); }
+.ask-text ul, .ask-text ol { margin: 0 0 12px; padding-left: 20px; }
+.ask-text li { margin-bottom: 6px; }
+.ask-text li::marker { color: var(--accent); }
+.ask-text a { color: var(--accent); text-decoration: underline; }
+.ask-text code { font-family: var(--mono); background: var(--bg3); padding: 1px 6px; border-radius: 3px; font-size: 0.9em; }
+.ask-text h1, .ask-text h2, .ask-text h3 { font-size: 17px; font-weight: 600; margin: 14px 0 8px; letter-spacing: 0; }
+.ask-text blockquote { border-left: 2px solid var(--border); padding-left: 14px; color: var(--muted2); margin: 0 0 12px; }

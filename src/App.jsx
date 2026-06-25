@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { supabase } from './supabaseClient'
+import { marked } from 'marked'
 
 const CV_FILE = '/cv_romain_aubert.pdf'
 
@@ -333,9 +334,22 @@ function Ask() {
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ANON}`, apikey: ANON },
         body: JSON.stringify({ question: text }),
       })
-      const data = await res.json()
-      if (!res.ok) { setStatus('err'); setError(data.error || 'Erreur.') }
-      else { setStatus('done'); setAnswer(data.answer || '') }
+      if (!res.ok || !res.body) {
+        let msg = 'Erreur.'
+        try { msg = (await res.json()).error || msg } catch { /* noop */ }
+        setStatus('err'); setError(msg); return
+      }
+      const reader = res.body.getReader()
+      const dec = new TextDecoder()
+      let acc = ''
+      setStatus('streaming')
+      for (;;) {
+        const { done, value } = await reader.read()
+        if (done) break
+        acc += dec.decode(value, { stream: true })
+        setAnswer(acc)
+      }
+      setStatus('done')
     } catch (e) { setStatus('err'); setError(String(e)) }
   }
 
@@ -353,20 +367,22 @@ function Ask() {
           <form onSubmit={onSubmit} className="ask-form">
             <input value={q} onChange={(e) => setQ(e.target.value)}
                    aria-label="Votre question" placeholder="Ex : Quels outils IA a-t-il construits ?" maxLength={1000} />
-            <button type="submit" className="btn-solid" disabled={status === 'loading'}>
-              {status === 'loading' ? '…' : 'Demander'}
+            <button type="submit" className="btn-solid" disabled={status === 'loading' || status === 'streaming'}>
+              {(status === 'loading' || status === 'streaming') ? '…' : 'Demander'}
             </button>
           </form>
           <div className="ask-chips">
             {ASK_SUGGESTIONS.map((s) => (
-              <button key={s} className="ask-chip" onClick={() => ask(s)} disabled={status === 'loading'}>{s}</button>
+              <button key={s} className="ask-chip" onClick={() => ask(s)} disabled={status === 'loading' || status === 'streaming'}>{s}</button>
             ))}
           </div>
           <div className="ask-answer">
             <div className="ask-answer-label">Réponse</div>
             {status === null && <p className="ask-placeholder">La réponse s'affichera ici.</p>}
             {status === 'loading' && <p className="ask-placeholder">Réflexion en cours…</p>}
-            {status === 'done' && <p className="ask-text">{answer}</p>}
+            {(status === 'streaming' || status === 'done') && (
+              <div className="ask-text" dangerouslySetInnerHTML={{ __html: marked.parse(answer || '') }} />
+            )}
             {status === 'err' && <p className="ask-err">{error}</p>}
           </div>
         </div>
