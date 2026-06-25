@@ -62,12 +62,13 @@ nav.scrolled {
 }
 .hero-bg {
   position: absolute; inset: 0; background-color: #080808;
-  background-image: url('/images/hero-portrait.jpg'); background-size: contain; background-repeat: no-repeat;
-  background-position: center top; will-change: transform;
+  background-image: url('/images/hero-portrait.jpg'); background-size: cover; background-repeat: no-repeat;
+  background-position: center 30%; will-change: transform;
+  filter: brightness(0.82) saturate(0.95);
 }
 .hero-bg::after {
   content: ''; position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(8,8,8,0.30) 0%, rgba(8,8,8,0.12) 35%, rgba(8,8,8,0.70) 75%, rgba(8,8,8,0.98) 100%);
+  background: linear-gradient(180deg, rgba(8,8,8,0.58) 0%, rgba(8,8,8,0.45) 40%, rgba(8,8,8,0.80) 80%, rgba(8,8,8,0.97) 100%);
 }
 .hero-content { position: relative; z-index: 1; max-width: 920px; }
 .hero-eyebrow {
