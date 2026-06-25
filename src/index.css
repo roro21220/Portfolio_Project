@@ -268,7 +268,7 @@ footer a:hover { color: var(--text); }
 /* Chat section: climbers photo as full-height left panel */
 .ask-grid { grid-template-columns: 1fr 1.3fr; align-items: stretch; }
 .ask-photo {
-  background: #0e0e0e url('/images/chat.jpg') center / cover no-repeat;
+  background: #0e0e0e url('/images/hero-portrait.jpg') center 32% / cover no-repeat;
   border: 1px solid var(--border); min-height: 540px; filter: brightness(0.92);
 }
 .ask-panel p { font-size: 16px; color: var(--muted2); line-height: 1.7; max-width: 520px; margin-bottom: 28px; }
