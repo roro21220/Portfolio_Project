@@ -1,8 +1,6 @@
 // ============================================================
 // FONCTION 'ask' — VERSION AUTONOME (un seul fichier)
-// À COLLER dans Supabase Dashboard > Edge Functions > Create function.
-// Contient le contexte profil + la logique. Édite le bloc PROFILE pour
-// mettre à jour les réponses du bot.
+// A COLLER dans Supabase Dashboard > Edge Functions > ask > Code.
 // ============================================================
 
 // ============================================================
@@ -32,7 +30,7 @@ d'où rigueur et persévérance dans sa façon de travailler.
   fonctionnelle / applicative / techno ; UML, BPMN, TOGAF 9 (certifié).
 
 ## Expériences
-- Sia Partners — Consultant Data & IA (nov. 2025 → présent).
+- Sia — Consultant Data & IA (nov. 2025 → présent).
   Lauréat d'un concours data interne : outil Python prenant un fichier Excel de prompts,
   lançant des requêtes massives multi-LLM via API, puis analysant les réponses (clustering
   sémantique, statistiques d'occurrence) pour positionner le cabinet face à ses concurrents.
@@ -87,7 +85,7 @@ Anglais bilingue (TOEIC 960/990). Allemand intermédiaire. TOGAF 9. MOOC INRS. G
 // La clé Gemini reste cote serveur (secret Supabase GEMINI_API_KEY).
 // Le modele ne repond QU'A PARTIR du contexte PROFILE (CV + instructions).
 
-const MODEL = "gemini-2.0-flash"; // rapide + free tier ; changeable
+const MODEL = "gemini-2.5-flash"; // free tier actuel
 const cors = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -127,7 +125,7 @@ Deno.serve(async (req) => {
     const body = {
       systemInstruction: { parts: [{ text: SYSTEM }] },
       contents: [{ role: "user", parts: [{ text: question }] }],
-      generationConfig: { temperature: 0.3, maxOutputTokens: 400 },
+      generationConfig: { temperature: 0.3, maxOutputTokens: 700 },
     };
 
     const r = await fetch(url, {

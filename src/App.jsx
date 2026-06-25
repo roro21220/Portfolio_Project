@@ -157,7 +157,7 @@ const PROJECTS = [
   {
     year: '2025 · Sia · Concours interne GEO',
     title: 'Outil Python d\'analyse de positionnement marché',
-    desc: "Solution autonome : clustering sémantique, APIs multi-LLM, analyse statistique d'occurrence de mots-clés pour mesurer l'alignement marché sur le segment conseil luxe. 1er sur l'ensemble des consultants.",
+    desc: "Solution autonome : clustering sémantique, APIs multi-LLM, analyse statistique d'occurrence de mots-clés pour mesurer l'alignement marché sur le segment conseil luxe. Lauréat du concours data interne.",
     tags: ['Python', 'NLP', 'LLM APIs', 'Clustering'],
   },
   {
@@ -354,7 +354,7 @@ function Ask() {
              expériences, compétences, projets, parcours.</p>
           <form onSubmit={onSubmit} className="ask-form">
             <input value={q} onChange={(e) => setQ(e.target.value)}
-                   placeholder="Ex : Quels outils IA a-t-il construits ?" maxLength={1000} />
+                   aria-label="Votre question" placeholder="Ex : Quels outils IA a-t-il construits ?" maxLength={1000} />
             <button type="submit" className="btn-solid" disabled={status === 'loading'}>
               {status === 'loading' ? '…' : 'Demander'}
             </button>

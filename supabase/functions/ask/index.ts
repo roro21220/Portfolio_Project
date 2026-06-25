@@ -3,7 +3,7 @@
 // Le modele ne repond QU'A PARTIR du contexte PROFILE (CV + instructions).
 import { PROFILE } from "./profile.ts";
 
-const MODEL = "gemini-2.0-flash"; // rapide + free tier ; changeable
+const MODEL = "gemini-2.5-flash"; // free tier actuel
 const cors = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -43,7 +43,7 @@ Deno.serve(async (req) => {
     const body = {
       systemInstruction: { parts: [{ text: SYSTEM }] },
       contents: [{ role: "user", parts: [{ text: question }] }],
-      generationConfig: { temperature: 0.3, maxOutputTokens: 400 },
+      generationConfig: { temperature: 0.3, maxOutputTokens: 700 },
     };
 
     const r = await fetch(url, {

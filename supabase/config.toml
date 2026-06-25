@@ -1,0 +1,3 @@
+# Garde la fonction publiquement appelable (chatbot) — sinon le préflight CORS casse.
+[functions.ask]
+verify_jwt = false

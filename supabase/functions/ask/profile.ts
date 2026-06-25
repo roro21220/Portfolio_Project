@@ -25,7 +25,7 @@ d'où rigueur et persévérance dans sa façon de travailler.
   fonctionnelle / applicative / techno ; UML, BPMN, TOGAF 9 (certifié).
 
 ## Expériences
-- Sia Partners — Consultant Data & IA (nov. 2025 → présent).
+- Sia — Consultant Data & IA (nov. 2025 → présent).
   Lauréat d'un concours data interne : outil Python prenant un fichier Excel de prompts,
   lançant des requêtes massives multi-LLM via API, puis analysant les réponses (clustering
   sémantique, statistiques d'occurrence) pour positionner le cabinet face à ses concurrents.
