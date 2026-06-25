@@ -63,7 +63,7 @@ nav.scrolled {
 .hero-bg {
   position: absolute; inset: 0; background-color: #1a2028;
   background-image: url('/images/hero.jpg'); background-size: cover;
-  background-position: center 35%; will-change: transform;
+  background-position: center 50%; will-change: transform;
 }
 .hero-bg::after {
   content: ''; position: absolute; inset: 0;
