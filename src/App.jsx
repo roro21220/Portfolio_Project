@@ -271,10 +271,6 @@ function Contact() {
           <div className="contact-direct">
             Direct : <a href="mailto:romain.aubert@icloud.com">romain.aubert@icloud.com</a>
           </div>
-          {/* Phase 2 — assistant IA sur le profil de Romain (chatbot RAG). */}
-          <div className="contact-direct" style={{ marginTop: 24, color: 'var(--muted2)' }}>
-            🤖 Bientôt : un assistant IA pour poser vos questions sur mon profil.
-          </div>
         </div>
         <form className="fade-up" onSubmit={onSubmit}>
           <div className="field">
