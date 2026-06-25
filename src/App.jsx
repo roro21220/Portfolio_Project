@@ -29,7 +29,8 @@ function Nav() {
         <a href="#build" className="hide-sm">Ce que je construis</a>
         <a href="#projects" className="hide-sm">Projets</a>
         <a href="#mountain" className="hide-sm">Montagne</a>
-        <a href="#contact">Contact</a>
+        <a href="#contact" className="hide-sm">Contact</a>
+        <a href="#ask" className="nav-ai">Assistant IA</a>
         <a href={CV_FILE} download className="nav-cv">CV ↓</a>
       </div>
     </nav>
@@ -343,7 +344,8 @@ function Ask() {
   return (
     <section id="ask">
       <div className="ask-grid">
-        <div className="fade-up">
+        <div className="ask-photo fade-up" role="img" aria-label="Romain en montagne" />
+        <div className="ask-panel fade-up">
           <div className="section-label">Assistant IA</div>
           <h2>Que voulez-vous<br />savoir sur moi ?</h2>
           <p>Posez votre question. Un assistant y répond à partir de mon CV et de mon profil :
@@ -360,13 +362,13 @@ function Ask() {
               <button key={s} className="ask-chip" onClick={() => ask(s)} disabled={status === 'loading'}>{s}</button>
             ))}
           </div>
-        </div>
-        <div className="ask-answer fade-up">
-          <div className="ask-answer-label">Réponse</div>
-          {status === null && <p className="ask-placeholder">La réponse s'affichera ici.</p>}
-          {status === 'loading' && <p className="ask-placeholder">Réflexion en cours…</p>}
-          {status === 'done' && <p className="ask-text">{answer}</p>}
-          {status === 'err' && <p className="ask-err">{error}</p>}
+          <div className="ask-answer">
+            <div className="ask-answer-label">Réponse</div>
+            {status === null && <p className="ask-placeholder">La réponse s'affichera ici.</p>}
+            {status === 'loading' && <p className="ask-placeholder">Réflexion en cours…</p>}
+            {status === 'done' && <p className="ask-text">{answer}</p>}
+            {status === 'err' && <p className="ask-err">{error}</p>}
+          </div>
         </div>
       </div>
     </section>
